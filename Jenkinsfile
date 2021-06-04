@@ -35,7 +35,7 @@ docker build . -t ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-docker run  -i ${name_imagen}:${tag_imagen}
+echo "Im testing"
 '''
         }
 
@@ -46,7 +46,7 @@ docker run  -i ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-echo "Executing command"
+echo "Im executing a command"
 '''
         }
 
@@ -58,10 +58,5 @@ echo "Executing command"
     name_final = 'go-jenkins'
     name_imagen = 'go-jenkins'
     tag_imagen = 'latest'
-  }
-  parameters {
-    string(name: 'name_container', defaultValue: 'go-jenkins', description: 'go-jenkins-pipeline')
-    string(name: 'name_imagen', defaultValue: 'go-jenkins', description: 'go-jenkins-pipeline')
-    string(name: 'tag_imagen', defaultValue: 'latest', description: 'go-jenkins')
   }
 }
