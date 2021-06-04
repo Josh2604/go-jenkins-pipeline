@@ -55,7 +55,9 @@ docker exec ${name_final} echo 1
 
   }
   environment {
-    name_final = "${name_container}${tag_imagen}"
+    name_final = 'qa-go-api-restlatest'
+    name_imagen = 'qa-go-api-rest'
+    tag_image = 'latest'
   }
   parameters {
     string(name: 'name_container', defaultValue: 'qa-go-api-rest', description: 'go-jenkins-pipeline')
