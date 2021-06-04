@@ -35,8 +35,8 @@ docker build . -t ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-            echo "Im testing"
-          '''
+echo "Im testing"
+'''
         }
 
       }
@@ -46,12 +46,17 @@ docker build . -t ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-    echo "Im executing a command"
+echo "Im executing a command"
 '''
         }
 
       }
     }
 
+  }
+  environment {
+    name_final = 'go-jenkins'
+    name_image = 'go-jenkins'
+    tag_image = 'go-jenkins'
   }
 }
