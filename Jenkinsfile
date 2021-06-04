@@ -57,6 +57,6 @@ echo "Im executing a command"
   environment {
     name_final = 'go-jenkins'
     name_imagen = 'go-jenkins'
-    tag_image = 'latest'
+    tag_imagen = 'latest'
   }
 }
