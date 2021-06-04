@@ -46,7 +46,7 @@ docker run  -i ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-docker exec ${name_final} echo 1
+docker exec ${name_imagen}:${tag_imagen} echo 1
 '''
         }
 
