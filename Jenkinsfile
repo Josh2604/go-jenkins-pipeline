@@ -1,70 +1,47 @@
 pipeline {
-  agent any
-  stages {
-    stage('stop/rm') {
-      when {
-        expression {
-          DOCKER_EXIST = sh(returnStdout: true, script: 'echo "$(docker ps -q --filter name=${name_final})"').trim()
-          return  DOCKER_EXIST != ''
-        }
-
-      }
-      steps {
-        script {
-          sh '''
-sudo docker stop ${name_final}
-sudo docker rm -vf ${name_final}
-'''
-        }
-
-      }
+    agent any
+    tools {
+        go '1.16.4'
     }
-    stage('test'){
-      steps{
-        script{
-                sh'''
-      go version
-'''
-        }
-      }
+    environment {
+        GO114MODULE = 'on'
+        CGO_ENABLED = 0
+        GOPATH = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
     }
-    stage('build') {
-      steps {
-        script {
-          sh '''
-docker build . -t ${name_imagen}:${tag_imagen}
-'''
+    stages {
+        stage('Pre Test') {
+            steps {
+                echo 'Installing dependencies'
+                sh 'go version'
+                sh 'go get -u golang.org/x/lint/golint'
+            }
         }
-
-      }
-    }
-
-    stage('run') {
-      steps {
-        script {
-          sh '''
-echo "Im testing"
-'''
+        stage('Build') {
+            steps {
+                echo 'Compiling and building'
+                sh 'go build'
+            }
         }
 
-      }
-    }
-
-    stage('command') {
-      steps {
-        script {
-          sh '''
-echo "Im executing a command"
-'''
+        stage('Test') {
+            steps {
+                withEnv(["PATH+GO=${GOPATH}/bin"]){
+                    echo 'Running vetting'
+                    sh 'go vet .'
+                    echo 'Running linting'
+                    sh 'golint .'
+                    echo 'Running test'
+                    sh 'cd test && go test -v'
+                }
+            }
         }
-
-      }
     }
-
-  }
-  environment {
-    name_final = 'go-jenkins'
-    name_imagen = 'go-jenkins'
-    tag_imagen = 'latest'
-  }
+    post {
+        always {
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                to: "${params.RECIPIENTS}",
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
+        }
+    }
 }
