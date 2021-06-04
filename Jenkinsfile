@@ -20,9 +20,9 @@ sudo docker rm -vf ${name_final}
       }
     }
     stage('Test'){
-      sh```
+      sh'''
       go version
-```
+'''
     }
     stage('build') {
       steps {
