@@ -35,7 +35,7 @@ docker build . -t ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-docker run  -it ${name_imagen}:${tag_imagen}
+docker run  -i ${name_imagen}:${tag_imagen}
 '''
         }
 
