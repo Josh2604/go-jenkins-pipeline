@@ -31,12 +31,12 @@ docker build . -t ${name_imagen}:${tag_imagen}
       }
     }
 
-    stage('test') {
+    stage('run') {
       steps {
         script {
           sh '''
-            echo "Im testing"
-          '''
+docker run  -i ${name_imagen}:${tag_imagen}
+'''
         }
 
       }
@@ -46,12 +46,22 @@ docker build . -t ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-    echo "Im executing a command"
+echo "Executing command"
 '''
         }
 
       }
     }
 
+  }
+  environment {
+    name_final = 'go-jenkins'
+    name_imagen = 'go-jenkins'
+    tag_imagen = 'latest'
+  }
+  parameters {
+    string(name: 'name_container', defaultValue: 'go-jenkins', description: 'go-jenkins-pipeline')
+    string(name: 'name_imagen', defaultValue: 'go-jenkins', description: 'go-jenkins-pipeline')
+    string(name: 'tag_imagen', defaultValue: 'latest', description: 'go-jenkins')
   }
 }
