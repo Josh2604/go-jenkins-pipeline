@@ -31,12 +31,12 @@ docker build . -t ${name_imagen}:${tag_imagen}
       }
     }
 
-    stage('run') {
+    stage('test') {
       steps {
         script {
           sh '''
-docker run  -i ${name_imagen}:${tag_imagen}
-'''
+            echo "Im testing"
+          '''
         }
 
       }
@@ -46,23 +46,12 @@ docker run  -i ${name_imagen}:${tag_imagen}
       steps {
         script {
           sh '''
-docker exec ${name_imagen}:${tag_imagen} echo 1
+    echo "Im executing a command"
 '''
         }
 
       }
     }
 
-  }
-  environment {
-    name_final = 'qa-go-api-restlatest'
-    name_imagen = 'qa-go-api-rest'
-    tag_image = 'latest'
-  }
-  parameters {
-    string(name: 'name_container', defaultValue: 'qa-go-api-rest', description: 'go-jenkins-pipeline')
-    string(name: 'name_imagen', defaultValue: 'qa-go-api-rest', description: 'go-jenkins-pipeline')
-    string(name: 'tag_imagen', defaultValue: 'latest', description: 'go-jenkins')
-    string(name: 'puerto_imagen', defaultValue: '8080', description: 'go-jenkins')
   }
 }
