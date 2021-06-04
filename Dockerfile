@@ -10,6 +10,8 @@ RUN go mod download
 COPY . .
 RUN go build main.go
 
+ENTRYPOINT ["go", "test", "-v", "./...", "-coverprofile", "cover.out"]
+
 FROM scratch
 COPY --from=builder /go/src .
 
